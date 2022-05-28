@@ -4,26 +4,29 @@ from dotenv import load_dotenv
 import os
 
 from email.message import EmailMessage
-from docx import Document
 
 
 #initialize .env file
 load_dotenv()
 #get email and password from .env file
-NAME = "Aditya Sen"
+NAME1 = "Aditya Sen"
+NAME2 = "Aditya Bhatia"
+NAME3 = "Steven Rowe"
+NAME4 = "Sebastian Spernac"
+TEAM_NAME = "Dodowranglers"
 EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
 
 
 #send email function (takes care of everything to send)
 #can change content of cover letter and email body + subject
-def send_email_companies(subject_email_address, subject_name) -> None:
+def send_email_companies(subject_email_address, subject_name) -> str:
     #change subject each specific company TODO Change subject name
-    subject = f"Internship Oppurtunity - {subject_name}"
+    subject = f"The Canadian Cancer Society Needs your Help"
     #INFO OF EMAIL
     #set where credentials of email, TO, FROM, SUBJECT
     message = EmailMessage()
-    message["From"] = NAME
+    message["From"] = f"{NAME1} {NAME2} {NAME3} {NAME4}"
     message["To"] = subject_email_address
     message["Subject"] = subject
 
@@ -33,35 +36,20 @@ def send_email_companies(subject_email_address, subject_name) -> None:
     message.set_content(
     f"""\
     Hello {subject_name},
-    another line
-    new conent
+    
+    Cancer doesn't sleep, and neither will we. On June 3rd and 4th, we will run in relay for 12 consecutive hours in solidarity with cancer patients, survivors, and those we have lost.
+    Please help us reach our team fundraising goal of $2000. No matter how much you donate, or how insignificant is seems to you, every dollar goes a long way. Money donated will go towards cancer research, furthering our efforts to win the battle with cancer.
+    Together, we can do this. Help us to relay for life!
 
+    Donate at:
+    https://support.cancer.ca/site/TR/RelayForLife/RFLY_NW_odd_?team_id=489955&pg=team&fr_id=28128
+    
     ---
-    {NAME}
+    {NAME1} {NAME2} {NAME3} {NAME4}
     Oakville, ON
-    Grade 11 High School Student @ Iroquois Ridge High School
-    {EMAIL}
+    Iroquois Ridge High School
+    {TEAM_NAME}
     """)
-
-    #ATTACHING TO EMAIL
-    #attach resume & cover letter to email
-    #resume
-    with open('Aditya Sen Resume - High School.pdf', 'rb') as content_file:
-        content = content_file.read()
-        message.add_attachment(content, maintype='application', subtype='pdf', filename='Aditya Sen Resume - High School.pdf')
-
-    #cover letter -- creates new cover letter
-    PDF_PATH = f'Custom Cover Letters/{NAME} Cover Letter for {subject_name}.docx'
-    new_cover_letter = Document()
-    #Add the cover letter material
-    new_cover_letter.add_heading('Aditya Sen', 0)
-
-    new_cover_letter.save(PDF_PATH)
-
-    with open(PDF_PATH, 'rb') as content_file:
-        content = content_file.read()
-        message.add_attachment(content, maintype='application', subtype='docx', filename=f"{NAME}'s Cover Letter for {subject_name}.docx")
-
 
     #send the email
     message = message.as_string()
@@ -80,26 +68,22 @@ def send_email_companies(subject_email_address, subject_name) -> None:
 email_check = []
 #get company name and emails
 #iterate through all the rows in the csv file
-job_csv = open("Job Email List.csv")
+job_csv = open("Untitled spreadsheet - Sheet1.csv")
 job_csv.readline()
 job_csv = csv.reader(job_csv)
+
+
 #change company email to each specfic company
 for data in job_csv:
-    subject_name_global = data[0] #company name
+    first_name = data[0] #first name
+    last_name = data[1] #last name
+    full_name = f"{data[0]} {data[1]}" #make full name
+    
+    subject_email = data[2] #get person's email
 
-    if data[1] != '': #company email
-        company_email = data[1]
-
-        #send email & check if it went successfully through
-        temp_list = []
-        temp_list.append(subject_name_global)
-        temp_list.append(send_email_companies(company_email, subject_name_global))
-    else:
-        #no email address to send to - Unsuccessful
-        temp_list = []
-        temp_list.append(subject_name_global)
-        temp_list.append("Unsuccessful")
-
+    temp_list = []
+    temp_list.append(full_name)
+    temp_list.append(send_email_companies(subject_email, full_name))
     
 
     email_check.append(temp_list)
