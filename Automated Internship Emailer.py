@@ -35,27 +35,29 @@ def send_email_companies(subject_email_address, subject_name) -> str:
     #Add email formatting and content
     message.set_content(
     f"""\
-    Hello {subject_name},
-    
-    Cancer doesn't sleep, and neither will we. On June 3rd and 4th, we will run in relay for 12 consecutive hours in solidarity with cancer patients, survivors, and those we have lost.
-    Please help us reach our team fundraising goal of $2000. No matter how much you donate, or how insignificant is seems to you, every dollar goes a long way. Money donated will go towards cancer research, furthering our efforts to win the battle with cancer.
-    Together, we can do this. Help us to relay for life!
+Hello {subject_name},
 
-    Donate at:
-    https://support.cancer.ca/site/TR/RelayForLife/RFLY_NW_odd_?team_id=489955&pg=team&fr_id=28128
-    
-    ---
-    {NAME1} {NAME2} {NAME3} {NAME4}
-    Oakville, ON
-    Iroquois Ridge High School
-    {TEAM_NAME}
+Cancer doesn't sleep, and neither will we. On June 3rd and 4th, we will run in relay for 12 consecutive hours in solidarity with cancer patients, survivors, and those we have lost.
+
+Please help us reach our team fundraising goal of $2000. No matter how much you donate, or how insignificant is seems to you, every dollar goes a long way. Money donated will go towards cancer research, furthering our efforts to win the battle with cancer.
+
+Together, we can do this. Help us to relay for life!
+
+Donate at:
+https://support.cancer.ca/site/TR/RelayForLife/RFLY_NW_odd_?team_id=489955&pg=team&fr_id=28128
+
+---
+{NAME1}, {NAME2}, {NAME3}, {NAME4}
+Oakville, ON
+Iroquois Ridge High School
+{TEAM_NAME}
     """)
 
     #send the email
     message = message.as_string()
     # Logs in and sends mail
     #NOTE after with statement STMP quits automatically 
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+    with smtplib.SMTP("smtp-mail.outlook.com", 587) as server:
         server.starttls() #starts TLS (security)
 
         server.login(EMAIL, PASSWORD) #login to my google gmail
